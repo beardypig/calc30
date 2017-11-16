@@ -19,8 +19,8 @@ case class Entry(
   def ::(that: Entry): Boolean =
     surface == that.surface && bleed == that.bleed &&
       aice == that.aice && flaps == that.flaps &&
-      Refs.clampAltitude(altitude) == that.altitude &&
-      Refs.clampWeight(weight) == that.weight
+      Entry.clampAltitude(altitude) == Entry.clampAltitude(that.altitude) &&
+      Entry.clampWeight(weight) == Entry.clampWeight(that.weight)
 }
 
 object Entry {
@@ -46,4 +46,11 @@ object Entry {
             weight: Long,
             temp: Int):
   Entry = new Entry(surface, bleed, aice, flaps, altitude, weight, temp)
+
+  def clampAltitude(alt: Long): Long = Math.min(
+    Math.round(Math.max(alt, 0) / 1000.0) * 1000, 10000)
+
+  def clampWeight(weight: Long): Long =
+    Seq(28000L, 30000L, 32000L, 34000L, 36000L, 38000L, 38850L)
+      .minBy(w => Math.abs(w - weight))
 }

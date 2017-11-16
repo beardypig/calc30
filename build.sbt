@@ -35,3 +35,5 @@ lazy val cl30 = (project in file("."))
     name := "calc30",
     libraryDependencies ++= dependencies
   )
+
+mainClass in Compile := Some("se.clan.cl30.Calculator")
